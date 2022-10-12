@@ -26,6 +26,7 @@ export const getServerSideProps: GetServerSideProps =
   wrapper.getServerSideProps((store) => async (context) => {
     try {      
         await store.dispatch(fetchCoctails());
+        // console.log('State on server', store.getState());
         return {
           props: null
         };

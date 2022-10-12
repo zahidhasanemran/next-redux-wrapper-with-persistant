@@ -17,6 +17,7 @@ const Contact: NextPage = () => {
         <div>
             <Link href="/">Home page</Link>
             <Link href="/contact">contact</Link>
+            <Link href="/about">about</Link>
         </div>
     )
 }

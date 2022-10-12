@@ -40,6 +40,13 @@ const rootSlice = createSlice({
     name: "root",
     initialState,
     reducers: {
+      /*
+      Redux Toolkit allows us to write "mutating" logic in reducers. It
+      doesn't actually mutate the state because it uses the Immer library,
+      which detects changes to a "draft state" and produces a brand new
+      immutable state based on those changes
+      */
+
         fillProfile(state, action:PayloadAction<any>) {
              state.profile = action.payload
         },
@@ -48,12 +55,20 @@ const rootSlice = createSlice({
         },
     },
     extraReducers: (builder)=> {
+        //? The HYDRATE function is what manages the state between client and server
         builder
           .addCase(HYDRATE, (state, action:any) => {
-            // console.log(action);
-            return { // TODO check next js example for reconcile 
-              ...state,
-              ...action.payload.root,//TODO 
+            // TODO use Differ 
+            if(action.payload.root.profile?.name){
+              state.profile = action.payload.root.profile
+            }else if(action.payload.root.userList.length > 0){
+              state.userList = action.payload.root.userList
+            }
+            else{
+              return {  
+                ...state,
+                ...action.payload.root,
+              }
             }
           })
          .addCase(fetchCoctails.pending, (state) => {
@@ -61,7 +76,8 @@ const rootSlice = createSlice({
          })
          .addCase(fetchCoctails.fulfilled, (state, { payload }) => {
            state.loading = false; 
-           state.userList.push(payload);//TODO 
+           //TODO 
+           state.userList.push(...payload);
          })
          .addCase(fetchCoctails.rejected, (state) => {
            state.loading = false; 
@@ -72,6 +88,6 @@ const rootSlice = createSlice({
 
 export const {fillProfile,fillUsers} = rootSlice.actions;
 
-export const selectUser = (state) => state.demo;
+export const selectUser = (state: any) => state.demo;
 
 export default rootSlice.reducer;
