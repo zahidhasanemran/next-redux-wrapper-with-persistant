@@ -1,8 +1,10 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { wrapper } from '../../store';
 import { fillProfile } from '../../store/slices/rootSlice';
+import { fetchUsers } from '../../store/slices/userSlice';
 
 const Contact: NextPage = () => {
 
@@ -24,16 +26,16 @@ const Contact: NextPage = () => {
 
 export default Contact;
 
-// export const getServerSideProps: GetServerSideProps =
-//   wrapper.getServerSideProps((store) => async (context) => {
-//     try {      
-//         await store.dispatch(fillProfile({name: 'Zahid',age:29}));
-//         return {
-//           props: null
-//         };
-//     } catch (err) {
-//       return {
-//         props:null
-//       };
-//     }
-//   });
+export const getServerSideProps: GetServerSideProps =
+  wrapper.getServerSideProps((store) => async (context) => {
+    try {      
+        await store.dispatch(fetchUsers());
+        return {
+          props: null
+        };
+    } catch (err) {
+      return {
+        props:null
+      };
+    }
+  });

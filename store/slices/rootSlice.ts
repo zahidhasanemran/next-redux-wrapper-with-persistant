@@ -1,10 +1,7 @@
-import { AppThunk, RootState } from './../index';
 import {
-	createSlice,
-	PayloadAction,
-	createAsyncThunk,
-} from '@reduxjs/toolkit'
-import { HYDRATE } from 'next-redux-wrapper'
+  createAsyncThunk, createSlice,
+  PayloadAction
+} from '@reduxjs/toolkit';
 
 interface initialDType {
     loading: boolean,
@@ -28,7 +25,7 @@ const initialState: initialDType = {
 }
 
 export const fetchCoctails = createAsyncThunk(
-    "demo/users",
+    "root/users",
     async () => {
       return fetch(
         "https://jsonplaceholder.typicode.com/todos"
@@ -46,7 +43,6 @@ const rootSlice = createSlice({
       which detects changes to a "draft state" and produces a brand new
       immutable state based on those changes
       */
-
         fillProfile(state, action:PayloadAction<any>) {
              state.profile = action.payload
         },
@@ -54,40 +50,11 @@ const rootSlice = createSlice({
             state.userList = action.payload  
         },
     },
-    extraReducers: (builder)=> {
-        //? The HYDRATE function is what manages the state between client and server
-        builder
-          .addCase(HYDRATE, (state, action:any) => {
-            // TODO use Differ 
-            if(action.payload.root.profile?.name){
-              state.profile = action.payload.root.profile
-            }else if(action.payload.root.userList.length > 0){
-              state.userList = action.payload.root.userList
-            }
-            else{
-              return {  
-                ...state,
-                ...action.payload.root,
-              }
-            }
-          })
-         .addCase(fetchCoctails.pending, (state) => {
-           state.loading = true;
-         })
-         .addCase(fetchCoctails.fulfilled, (state, { payload }) => {
-           state.loading = false; 
-           //TODO 
-           state.userList.push(...payload);
-         })
-         .addCase(fetchCoctails.rejected, (state) => {
-           state.loading = false; 
-           state.error = 'Something is wrong!';
-         })
-    },
+   
 })
 
 export const {fillProfile,fillUsers} = rootSlice.actions;
 
-export const selectUser = (state: any) => state.demo;
+export const selectUser = (state: any) => state.root;
 
-export default rootSlice.reducer;
+export const rootReducer = rootSlice.reducer;

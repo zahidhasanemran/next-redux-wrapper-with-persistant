@@ -2,7 +2,7 @@ import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { wrapper } from '../store'
-import { fetchCoctails } from '../store/slices/rootSlice'
+import { fetchCoctails, fillProfile } from '../store/slices/rootSlice'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
@@ -25,7 +25,7 @@ export default Home
 export const getServerSideProps: GetServerSideProps =
   wrapper.getServerSideProps((store) => async (context) => {
     try {      
-        await store.dispatch(fetchCoctails());
+        await store.dispatch(fillProfile({age:1, name:"Uzzal"}));
         // console.log('State on server', store.getState());
         return {
           props: null
