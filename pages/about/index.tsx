@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import type { GetServerSideProps, NextPage } from 'next'
 import { wrapper } from '../../store';
-import { fillProfile } from '../../store/slices/rootSlice';
 import {connect, useDispatch} from 'react-redux';
 import { useEffect } from 'react';
-import { fillUser } from '../../store/slices/userSlice';
 import { users } from '../../data';
+import { fillUser } from '../../store/slices/userSlice';
+import { fillProfile } from '../../store/slices/rootSlice';
 
 const About: NextPage = () => {
 
